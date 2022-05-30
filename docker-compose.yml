@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  frontend:
+    image: "frontend-cd:1.0.0"
+    restart: unless-stopped
+    platform: linux/amd64
+    build: .
+    networks:
+      - default
+    ports:
+      - "80:80"
+
+
+networks:
+  default:
