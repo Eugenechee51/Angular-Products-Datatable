@@ -1,0 +1,103 @@
+.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42A948;
+  /* green */
+}
+
+
+.ng-touched.ng-invalid:not(form) {
+  border-left: 5px solid #a94442;
+  /* red */
+}
+
+.table{
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-size: 8pt;
+}
+.thead{
+  overflow: hidden;
+}
+.raw {
+
+  width: 14vw;
+  height: 5vh;
+  max-height: 5vh;
+}
+.dt-center1{
+  display: table-cell;
+  padding: 1px;
+  max-width: 4vw;
+  white-space: nowrap;
+}
+.dt-center2{
+  display: table-cell;
+  padding: 1px;
+  max-width: 4vw;
+  white-space: nowrap;
+}
+.measureArea{
+  width: 50%;
+  padding-block: 20px;
+}
+.countArea{
+  width: 50%;
+  padding-block: 20px;
+}
+.uniqueArea{
+  width: 60%;
+  padding-block: 40px;
+}
+
+.measureArea button {
+  float: left;
+  height: 32px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.measureArea .inputDiv, .countArea .inputDiv, .countArea .inputDiv{
+  float: right;
+}
+.measureArea select {
+  width: 150px;
+  //padding: 0 3px;
+  height: 32px;
+  margin-left: auto;
+  float: right;
+}
+
+.countArea button{
+  float: left;
+  height: 32px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin:0;
+  display: inline;
+}
+.countArea input {
+  float: right;
+  width: 150px;
+  height: 32px;
+}
+
+.searchInput{
+  max-width: 4vw;
+  font-size: 8pt;
+  font-style: italic;
+  background-color: #ffffff;
+}
+
+.deleteButton{
+  width: 50px;
+  height: auto;
+  max-width: 3vh;
+}
+
+.editButton{
+  width: 50px;
+  height: auto;
+  max-width: 3vh;
+}

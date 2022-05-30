@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr';
+@import '~ngx-toastr/toastr-bs4-alert';
+
+body {;
+  min-width: 100%;
+}
+div.container{
+  min-width: 100%;
+  //max-width: 150%;
+}
+.col-sm-2.col-form-label {
+  flex: 0 0 16.666667%;
+  max-width: 30%;
+  text-align-all: center;
+}
+div.col-sm-10 {
+  flex: 0 0 83.333333%;
+  max-width: 60%;
+  margin-left: auto;
+}
+.modal-content {
+  flex: 0 0 83.333333%;
+  min-width: 120%;
+  margin-left: auto;
+}

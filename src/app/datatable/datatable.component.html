@@ -1,0 +1,116 @@
+<script src="../../environments/environment.prod.ts"></script>
+<table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+  <thead class="thead">
+  </thead>
+  <tfoot>
+  <tr>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-id"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-name"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-coord-x"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-coord-y"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-creation-date"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-price"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manufactureCost"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-unitOfMeasure"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manu-id"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manu-name"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manu-fullName"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manu_employeesCount"/></th>
+    <th><input class='searchInput' type="text" placeholder="Поиск" name="search-manu_type"/></th>
+    <th><input class='searchInput' type="hidden" placeholder="Поиск" name="search-act"/></th>
+  </tr>
+  </tfoot>
+</table>
+<div class="subDiv">
+  <div class="measureArea">
+    <button id="delByMeasureBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Удалить продукты по типу ед. измерения:</button>
+    <div class="inputDiv">
+      <!--<input type="text" id="measureField" placeholder="PCS or GRAMS" tabindex="1" />-->
+      <select id="measureField" class="select">
+        <option>PCS</option>
+        <option>GRAMS</option>
+        <option>CENTIMETERS</option>
+        <option>MILLILITERS</option>
+      </select>
+    </div>
+  </div>
+  <div class="countArea">
+    <button id="countByManufacturerIdBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Подсчитать кол-во продуктов производителя:</button>
+    <div class="inputDiv">
+      <input type="text" id="manufacturerIdField" placeholder="ИД производителя" tabindex="1"/>
+      <div id="count" class="paragraph">
+        <p id="p1"></p>
+      </div>
+    </div>
+  </div>
+  <div class="uniqueArea">
+    <button id="getUniqueManufactureCostBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Отобразить продукты с уникальными стоимостями</button>
+  </div>
+</div>
+<ng-template #addEditModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{currentOperation}} продукта</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="onAddEditFormSubmit(f.form.value)">
+      <div *ngFor="let col of addColumns;let i=index" class="form-group row">
+        <label class="col-sm-2 col-form-label">{{col.title}}</label>
+        <div class="col-sm-10" *ngIf="col.title === 'Название'">
+          <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Коорд. х'">
+          <input type="text" id = "input_x" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Коорд. у'">
+          <input type="text" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Цена'">
+          <input type="text" id = "input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Цена производителя'">
+          <input type="text" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Ед. измерения'">
+          <select class="form-control" [ngModel]="currentRecord[col.data]"  [name]="col.data">
+            <option>PCS</option>
+            <option>GRAMS</option>
+            <option>CENTIMETERS</option>
+            <option>MILLILITERS</option>
+          </select>
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Имя производ.'">
+          <input id="input_m_name" (change)="manufactureRequire()" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Полное имя производ.'">
+          <input id="input_m_fullName" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Число сотрудников'">
+          <input id="input_m_employeesCount" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+        </div>
+        <div class="col-sm-10" *ngIf="col.title === 'Тип компании'">
+          <select class="form-control" [ngModel]="currentRecord[col.data]"  [name]="col.data">
+            <option>COMMERCIAL</option>
+            <option>PUBLIC</option>
+            <option>PRIVATE_LIMITED_COMPANY</option>
+          </select>
+        </div>
+        <div class="col-sm-10">
+        <span *ngIf="f.form.controls[col.data]?.touched && f.form.controls[col.data]?.errors" class="text-danger">Это поле обязательное</span>
+        </div>
+        <!--
+        <div class="col-sm-10">
+          <input type="text" class="form-control" [ngModel]="currentRecord?currentRecord[col.data]:null" required [name]="col.data">
+        </div>
+        -->
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" (click)="modal.dismiss('cancel')">Cancel</button>
+        <button type="submit" [disabled]="f.invalid" class="btn btn-primary ml-2">Save</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<ngx-loading [show]="showLoader" ></ngx-loading>
