@@ -10,8 +10,8 @@ export class ProductsComponent implements OnInit {
   constructor() { }
   ngOnInit(): void {
     this.customDtOptions = {
-      // baseApiUrl: "http://labvm-42-05.itmo-lab.cosm-lab.science:8080",
-      baseApiUrl: "http://localhost:8080",
+      baseApiUrl: "http://labvm-42-05.itmo-lab.cosm-lab.science:8080",
+      //baseApiUrl: "http://localhost:8080",
       get: "products",
       edit: "products",
       add: "products",

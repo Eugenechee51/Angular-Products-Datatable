@@ -3,7 +3,6 @@ services:
   frontend:
     image: "frontend-cd:1.0.0"
     restart: unless-stopped
-    platform: linux/amd64
     build: .
     networks:
       - default
