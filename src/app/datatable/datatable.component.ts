@@ -1,13 +1,13 @@
-import { DataTableService } from './dataTable.service';
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
-import {DecimalPipe, formatDate} from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import {DataTableService} from './dataTable.service';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Subject} from 'rxjs';
+import {DataTableDirective} from 'angular-datatables';
+import {DecimalPipe} from '@angular/common';
+import {ToastrService} from 'ngx-toastr';
 
 import parser from 'xml2js';
-
+import {trim} from 'jquery';
 
 
 function parseXml(xmlData: any) {
@@ -186,25 +186,58 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     elem.prop('required', check);
     elem.prop('ng-reflect-required', check);
   }
-  manufactureRequire() {
+  manufactureRequire(form, colData) {
     // tslint:disable-next-line:variable-name
-    const m_name = $('#input_m_name');
-    const full_name = $('#input_m_fullName');
-    const employees_count = document.querySelector('#input_m_employeesCount');
-    const m_type = $('#input_m_type');
-    employees_count.setAttribute('required', 'true');
-    this.require(m_name, true);
-    this.require(full_name, true);
-    // this.require(employees_count, true);
-    this.require(m_type, true);
+    if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
+      if (colData in ['manufacturer.0.name', 'manufacturer.0.fullName', 'manufacturer.0.type'] ) {
+        if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === ''){
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return form.controls[colData]?.invalid;
+      }
+    }
+    // const m_name = $('#input_m_name');
+    // const full_name = $('#input_m_fullName');
+    // // const employees_count = $('#input_m_employeesCount');
+    // const m_type = $('#input_m_type');
+    // console.log(formValue['manufacturer.0.name']);
+    // if (trim(formValue['manufacturer.0.name']) !== '' || trim(formValue['manufacturer.0.fullName']) !== '' || trim(formValue['manufacturer.0.type']) !== '') {
+    //   this.require(m_name, true);
+    //   this.require(full_name, true);
+    //   // this.require(employees_count, true);
+    //   this.require(m_type, true);
+    // } else {
+    //   this.require(m_name, false);
+    //   this.require(full_name, false);
+    //   // this.require(employees_count, false);
+    //   this.require(m_type, false);
+    // }
   }
   openAddEditModal(iRow) {
-    this.currentOperation = (iRow === -1) ? 'Добавление' : 'Изменение';
     // if (iRow === -1)
       // iRow = 0;
-    this.templateDataObject = [];
-    console.log(this.data[0]);
-    this.currentRecord = (iRow === -1) ? this.templateDataObject : this.data[iRow];
+    if (iRow !== -1) {
+      this.currentOperation = 'Изменение';
+      this.currentRecord = {
+        id: this.data[iRow]?.id,
+        name: this.data[iRow].name,
+        'coordinates.0.x': this.data[iRow]['coordinates'][0]['x'][0],
+        'coordinates.0.y': this.data[iRow]['coordinates'][0]['y'][0],
+        price: this.data[iRow].price,
+        manufactureCost: this.data[iRow].manufactureCost,
+        unitOfMeasure: this.data[iRow].unitOfMeasure,
+        'manufacturer.0.name': this.data[iRow]['manufacturer'][0]['name'],
+        'manufacturer.0.fullName': this.data[iRow]['manufacturer'][0]['fullName'],
+        'manufacturer.0.employeesCount': this.data[iRow]['manufacturer'][0]['employeesCount'],
+        'manufacturer.0.type': this.data[iRow]['manufacturer'][0]['type']
+      };
+    } else {
+      this.currentOperation = 'Добавление';
+      this.currentRecord = [];
+    }
     console.log('Current record: ' + this.currentRecord);
     this.modalService.open(this.addEditModalRef).result
       .then((result) => console.log('Modal closed'))
@@ -217,7 +250,6 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   onAddEditFormSubmit(formValue) {
     this.showLoader = true;
     this.modalService.dismissAll();
-    const prop = this.customDtOptions.param;
     if (this.currentOperation === 'Добавление') {
       const json = {
         name: formValue.name,
@@ -252,22 +284,24 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       });
     } else {
       const json = {
-        id: this.currentRecord[prop][0],
-        name: formValue.name[0],
+        id: this.currentRecord['id'][0],
+        name: formValue.name.length > 1 ? formValue.name : formValue.name[0] ,
         coordinates: {
-          x: formValue['coordinates.0.x'],
-          y: formValue['coordinates.0.y']
+          x: formValue['coordinates.0.x'].length > 1 ? formValue['coordinates.0.x'] : formValue['coordinates.0.x'][0],
+          y: formValue['coordinates.0.y'].length > 1 ? formValue['coordinates.0.y'] : formValue['coordinates.0.y'][0]
         },
-        price: formValue.price[0],
-        manufactureCost: formValue.manufactureCost[0],
-        unitOfMeasure: formValue.unitOfMeasure[0],
+        price: formValue.price.length > 1 ? formValue.price : formValue.price[0],
+        manufactureCost: formValue.manufactureCost.length > 1 ? formValue.manufactureCost : formValue.manufactureCost[0],
+        unitOfMeasure: formValue.unitOfMeasure.length > 1 ? formValue.unitOfMeasure : formValue.unitOfMeasure[0],
         manufacturer: {
-          name: formValue['manufacturer.0.name'][0],
-          fullName: formValue['manufacturer.0.fullName'][0],
-          employeesCount: formValue['manufacturer.0.employeesCount'][0],
-          type: formValue['manufacturer.0.type']
+          name: formValue['manufacturer.0.name'].length > 1 ? formValue['manufacturer.0.name'] : formValue['manufacturer.0.name'][0],
+          fullName: formValue['manufacturer.0.fullName'].length > 1 ? formValue['manufacturer.0.fullName'] : formValue['manufacturer.0.fullName'][0],
+          employeesCount: formValue['manufacturer.0.employeesCount'].length > 1 ? formValue['manufacturer.0.employeesCount'] : formValue['manufacturer.0.employeesCount'][0],
+          type: formValue['manufacturer.0.type'].length > 1 ? formValue['manufacturer.0.type'] : formValue['manufacturer.0.type'][0]
         }
       };
+      console.log(formValue['manufacturer.0.employeesCount'][0]);
+      console.log(json);
       this.dataTableService.editData(this.customDtOptions.edit, json).subscribe((res) => {
         console.log(res);
         this.currentRecord = null;
@@ -335,11 +369,12 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       console.log(this.data);
       this.currentRecord = null;
       this.currentOperation = '';
-      this.toastr.success('Продуктов подсчитано: ' + this.data, 'Успех');
-      if (this.data !== '0') {
+      if (trim(this.data) !== '0') {
         document.getElementById('p1').textContent = 'Продуктов подсчитано: ' + this.data;
+        this.toastr.success('Продуктов подсчитано: ' + this.data, 'Успех');
       } else {
-        document.getElementById('p1').textContent = 'Таких продуктов нет.';
+        document.getElementById('p1').textContent = 'У выбранного производителя нет продуктов.';
+        this.toastr.info('У выбранного производителя нет продуктов.', 'Инфо');
       }
       this.customDtOptions.eventCallbacks.countedByManufacturer();
       this.getData(true);

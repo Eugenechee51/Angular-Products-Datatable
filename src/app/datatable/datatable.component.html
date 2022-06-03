@@ -57,9 +57,10 @@
   <div class="modal-body">
     <form #f="ngForm" (ngSubmit)="onAddEditFormSubmit(f.form.value)">
       <div *ngFor="let col of addColumns;let i=index" class="form-group row">
+
         <label class="col-sm-2 col-form-label">{{col.title}}</label>
         <div class="col-sm-10" *ngIf="col.title === 'Название'">
-          <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" required  [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. х'">
           <input type="text" id = "input_x" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
@@ -74,7 +75,7 @@
           <input type="text" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Ед. измерения'">
-          <select class="form-control" [ngModel]="currentRecord[col.data]"  [name]="col.data">
+          <select class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
             <option>PCS</option>
             <option>GRAMS</option>
             <option>CENTIMETERS</option>
@@ -82,23 +83,25 @@
           </select>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Имя производ.'">
-          <input id="input_m_name" (change)="manufactureRequire()" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input id="input_m_name"  type="text" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Полное имя производ.'">
-          <input id="input_m_fullName" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input id="input_m_fullName" required type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Число сотрудников'">
           <input id="input_m_employeesCount" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Тип компании'">
-          <select class="form-control" [ngModel]="currentRecord[col.data]"  [name]="col.data">
+          <select class="form-control" required [ngModel]="currentRecord[col.data]"  [name]="col.data">
+            <option></option>
             <option>COMMERCIAL</option>
             <option>PUBLIC</option>
             <option>PRIVATE_LIMITED_COMPANY</option>
           </select>
         </div>
         <div class="col-sm-10">
-        <span *ngIf="f.form.controls[col.data]?.touched && f.form.controls[col.data]?.errors" class="text-danger">Это поле обязательное</span>
+        <span *ngIf="manufactureRequire(f.form, col.data)" class="text-danger">Это поле обязательное</span>
+
         </div>
         <!--
         <div class="col-sm-10">

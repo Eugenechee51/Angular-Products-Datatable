@@ -14,6 +14,7 @@
   display: block;
   margin: 0;
   padding: 0;
+  min-width: 100vw;
   font-size: 8pt;
 }
 .thead{
@@ -37,51 +38,63 @@
   max-width: 4vw;
   white-space: nowrap;
 }
+
+.subDiv{
+  display: flex;
+}
 .measureArea{
-  width: 50%;
+  //width: 50%;
+  left: 1rem;
+  //width: 30vw;
+  //position: static;
   padding-block: 20px;
 }
 .countArea{
-  width: 50%;
+  //width: 50%;
+  left: 30rem;
+  right: 30rem;
+  position: absolute;
+  //width: 30vw;
   padding-block: 20px;
 }
 .uniqueArea{
-  width: 60%;
-  padding-block: 40px;
+  //width: 60%;
+  right: 1rem;
+  //width: 30vw;
+  position: absolute;
+  padding-block: 20px;
 }
 
-.measureArea button {
+.measureArea .countArea .uniqueArea button {
   float: left;
   height: 32px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.measureArea .inputDiv, .countArea .inputDiv, .countArea .inputDiv{
-  float: right;
+.inputDiv{
+  margin: 1rem 1rem 1rem auto;
 }
 .measureArea select {
   width: 150px;
-  //padding: 0 3px;
   height: 32px;
-  margin-left: auto;
-  float: right;
+  //margin: 1rem 1rem 1rem auto;
 }
 
-.countArea button{
-  float: left;
-  height: 32px;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  margin:0;
-  display: inline;
-}
-.countArea input {
-  float: right;
-  width: 150px;
-  height: 32px;
-}
+//.countArea button{
+//  float: left;
+//  height: 32px;
+//  -webkit-box-sizing: border-box;
+//  -moz-box-sizing: border-box;
+//  box-sizing: border-box;
+//  margin:0;
+//  display: inline;
+//}
+//.countArea input {
+//  float: right;
+//  width: 150px;
+//  height: 32px;
+//}
 
 .searchInput{
   max-width: 4vw;
