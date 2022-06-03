@@ -13,6 +13,7 @@ import {trim} from 'jquery';
 function parseXml(xmlData: any) {
     let result;
     parser.Parser().parseString(xmlData, (e, r) => {result = r; });
+    console.log(result);
     return result;
 }
 

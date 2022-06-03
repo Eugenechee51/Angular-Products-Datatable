@@ -27,10 +27,10 @@
     <div class="inputDiv">
       <!--<input type="text" id="measureField" placeholder="PCS or GRAMS" tabindex="1" />-->
       <select id="measureField" class="select">
-        <option>PCS</option>
-        <option>GRAMS</option>
-        <option>CENTIMETERS</option>
-        <option>MILLILITERS</option>
+        <option value="PCS">Штуки</option>
+        <option value="GRAMS">Граммы</option>
+        <option value="CENTIMETERS">Сантиметры</option>
+        <option value="MILLILITERS">Миллилитры</option>
       </select>
     </div>
   </div>
@@ -76,10 +76,10 @@
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Ед. измерения'">
           <select class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
-            <option>PCS</option>
-            <option>GRAMS</option>
-            <option>CENTIMETERS</option>
-            <option>MILLILITERS</option>
+            <option value="PCS">Штуки</option>
+            <option value="GRAMS">Граммы</option>
+            <option value="CENTIMETERS">Сантиметры</option>
+            <option value="MILLILITERS">Миллилитры</option>
           </select>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Имя производ.'">
@@ -94,9 +94,9 @@
         <div class="col-sm-10" *ngIf="col.title === 'Тип компании'">
           <select class="form-control" required [ngModel]="currentRecord[col.data]"  [name]="col.data">
             <option></option>
-            <option>COMMERCIAL</option>
-            <option>PUBLIC</option>
-            <option>PRIVATE_LIMITED_COMPANY</option>
+            <option value="COMMERCIAL">Коммерческая</option>
+            <option value="PUBLIC">Публичная</option>
+            <option value="PRIVATE_LIMITED_COMPANY">ООО</option>
           </select>
         </div>
         <div class="col-sm-10">
