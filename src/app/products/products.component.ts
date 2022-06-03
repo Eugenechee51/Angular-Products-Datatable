@@ -29,7 +29,7 @@ export class ProductsComponent implements OnInit {
           { title: "Коорд. у", data: "coordinates.0.y" },
           { title: "Дата создания", data: "creationDate"},
           { title: "Цена", data: "price", format: "text" },
-          { title: "Стоимость", data: "manufactureCost"},
+          { title: "Цена производителя", data: "manufactureCost"},
           { title: "Ед. измерения", data: "unitOfMeasure", format: "text"},
           { title: "Производ. ИД", data: "manufacturer.0.id" },
           { title: "Имя производ.", data: "manufacturer.0.name" },
