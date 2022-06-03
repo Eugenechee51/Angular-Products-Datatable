@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   frontend:
-    image: "ityce4ka/frontend-cd:1.0.1"
+    image: "ityce4ka/frontend-cd:1.0.1-arm"
     platform: linux/amd64
     restart: unless-stopped
     build: .

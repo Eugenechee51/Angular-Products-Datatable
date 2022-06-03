@@ -54,7 +54,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       { title: 'Коорд. х', data: 'coordinates.0.x'},
       { title: 'Коорд. у', data: 'coordinates.0.y' },
       { title: 'Цена', data: 'price', format: 'text' },
-      { title: 'Стоимость', data: 'manufactureCost'},
+      { title: 'Цена производителя', data: 'manufactureCost'},
       { title: 'Ед. измерения', data: 'unitOfMeasure', format: 'text'},
       { title: 'Имя производ.', data: 'manufacturer.0.name' },
       { title: 'Полное имя производ.', data: 'manufacturer.0.fullName'},
