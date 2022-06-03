@@ -86,7 +86,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
         $(nTd).find('#deleteRecordBtn').on('click', () => this.removeRecord(iRow));
       }
     });
-    this.customDtOptions.dataTableOptions.columns.push({ title: 'Actions', data: null });
+    this.customDtOptions.dataTableOptions.columns.push({ title: 'Действия', data: null });
     const language = {
         processing: 'Подождите...',
         search: 'Поиск:',
@@ -336,7 +336,11 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.currentRecord = null;
       this.currentOperation = '';
       this.toastr.success('Продуктов подсчитано: ' + this.data, 'Успех');
-      document.getElementById('p1').textContent = 'Продуктов подсчитано: ' + this.data;
+      if (this.data !== '0') {
+        document.getElementById('p1').textContent = 'Продуктов подсчитано: ' + this.data;
+      } else {
+        document.getElementById('p1').textContent = 'Таких продуктов нет.';
+      }
       this.customDtOptions.eventCallbacks.countedByManufacturer();
       this.getData(true);
     }, (err) => {
