@@ -63,19 +63,19 @@
           <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" required  [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. х'">
-          <input type="text" id = "input_x" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" id="input_x" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. у'">
-          <input type="text" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" min="-686.999" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Цена'">
-          <input type="text" id = "input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input type="number" min="1" id="input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Цена производителя'">
-          <input type="text" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Ед. измерения'">
-          <select class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <select class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
             <option value="PCS">Штуки</option>
             <option value="GRAMS">Граммы</option>
             <option value="CENTIMETERS">Сантиметры</option>
@@ -89,7 +89,7 @@
           <input id="input_m_fullName" required type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Число сотрудников'">
-          <input id="input_m_employeesCount" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input type="number" id="input_m_employeesCount" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Тип компании'">
           <select class="form-control" required [ngModel]="currentRecord[col.data]"  [name]="col.data">
@@ -100,9 +100,26 @@
           </select>
         </div>
         <div class="col-sm-10">
-        <span *ngIf="manufactureRequire(f.form, col.data)" class="text-danger">Это поле обязательное</span>
-
+          <span *ngIf="manufactureRequire(f.form, col.data)" class="text-danger">Это поле обязательное</span>
         </div>
+<!--        <div *ngIf="f.form.invalid && (f.form.dirty || f.form.touched)">-->
+<!--          <div *ngIf="f.form.errors.required">-->
+<!--            Required field-->
+<!--          </div>-->
+<!--          <div *ngIf="f.form.errors.min">-->
+<!--            Min possible value is 100-->
+<!--          </div>-->
+<!--        </div>-->
+<!--       <div class="col-sm-10">-->
+<!--          <div *ngIf="f.form.controls[col.data]?.dirty && f.form.controls[col['coordinates.0.y']]?.errors.min">-->
+<!--            Min possible value is -687-->
+<!--          </div>-->
+<!--          <div *ngIf="f.form.controls[col.data]?.invalid && (f.form.controls[col.data]?.dirty || f.form.controls[col.data]?.touched)">-->
+<!--            <div *ngIf="f.form.controls[col.data]?.errors.required">-->
+<!--              Required field-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <!--
         <div class="col-sm-10">
           <input type="text" class="form-control" [ngModel]="currentRecord?currentRecord[col.data]:null" required [name]="col.data">
