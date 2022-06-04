@@ -8,16 +8,19 @@ import { ProductsComponent } from './products/products.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './services/in-memory.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { environment } from 'src/environments/environment.prod';
 import { NgxLoadingModule } from 'ngx-loading';
+import { CustomMinDirective } from './datatable/custom-min.directive';
+import {CustomRequiredDirective} from './datatable/custom-required.directive';
+import {CustomMaxLengthDirective} from './datatable/custom-maxlength.directive';
 @NgModule({
   declarations: [
     AppComponent,
     DataTableComponent,
     ProductsComponent,
+    CustomMinDirective,
+    CustomRequiredDirective,
+    CustomMaxLengthDirective,
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,6 @@ import { NgxLoadingModule } from 'ngx-loading';
     FormsModule,
     HttpClientModule,
     NgbModalModule,
-    environment.inMemoryDatabase?InMemoryWebApiModule.forRoot(InMemoryDataService):[],
     ToastrModule.forRoot(),
     NgxLoadingModule.forRoot({}),
     BrowserAnimationsModule

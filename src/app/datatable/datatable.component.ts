@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 
 import parser from 'xml2js';
 import {trim} from 'jquery';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {customRequiredValidator} from './validator.component';
 
 
 function parseXml(xmlData: any) {
@@ -188,34 +190,39 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     elem.prop('ng-reflect-required', check);
   }
   manufactureRequire(form, colData) {
-    // tslint:disable-next-line:variable-name
     if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
-      if (colData in ['manufacturer.0.name', 'manufacturer.0.fullName', 'manufacturer.0.type'] ) {
-        if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === ''){
-          return false;
-        } else {
+      if (form.controls[colData]?.errors?.customRequired){
+        if (colData === 'manufacturer.0.name' || colData === 'manufacturer.0.fullName' ||  colData === 'manufacturer.0.type'){
+          if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === ''){
+            form.controls[colData]?.clearValidators();
+            form.controls[colData]?.updateValueAndValidity();
+            console.log(form);
+            return false;
+          } else {
+            form.controls[colData]?.setValidators(customRequiredValidator);
+            form.controls[colData]?.updateValueAndValidity();
+            return true;
+          }
+        }else{
           return true;
         }
       } else {
-        return form.controls[colData]?.invalid;
+        if (colData === 'manufacturer.0.name' || colData === 'manufacturer.0.fullName' ||  colData === 'manufacturer.0.type') {
+          if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === '') {
+            form.controls[colData]?.clearValidators();
+            form.controls[colData]?.updateValueAndValidity();
+          } else {
+            console.log(form);
+            form.controls[colData]?.setValidators(customRequiredValidator);
+            form.controls[colData]?.updateValueAndValidity();
+            return false;
+            // console.log(form);
+          }
+        }
+        return false;
       }
+
     }
-    // const m_name = $('#input_m_name');
-    // const full_name = $('#input_m_fullName');
-    // // const employees_count = $('#input_m_employeesCount');
-    // const m_type = $('#input_m_type');
-    // console.log(formValue['manufacturer.0.name']);
-    // if (trim(formValue['manufacturer.0.name']) !== '' || trim(formValue['manufacturer.0.fullName']) !== '' || trim(formValue['manufacturer.0.type']) !== '') {
-    //   this.require(m_name, true);
-    //   this.require(full_name, true);
-    //   // this.require(employees_count, true);
-    //   this.require(m_type, true);
-    // } else {
-    //   this.require(m_name, false);
-    //   this.require(full_name, false);
-    //   // this.require(employees_count, false);
-    //   this.require(m_type, false);
-    // }
   }
   openAddEditModal(iRow) {
     // if (iRow === -1)

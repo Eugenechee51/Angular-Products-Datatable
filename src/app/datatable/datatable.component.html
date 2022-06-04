@@ -60,22 +60,30 @@
 
         <label class="col-sm-2 col-form-label">{{col.title}}</label>
         <div class="col-sm-10" *ngIf="col.title === 'Название'">
-          <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" required  [name]="col.data">
+          <input type="text" id = "input_name" class="form-control" [ngModel]="currentRecord[col.data]" customRequired  [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. х'">
-          <input type="number" id="input_x" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" id="input_x" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. у'">
-          <input type="number" min="-686.999" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" [customMin]="-686.999" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data " #coor_y="ngModel">
+          <div *ngIf="coor_y.dirty || coor_y.touched">
+            <span *ngIf="coor_y?.errors?.customMin" class="text-danger">Значение должно быть больше -687</span>
+          </div>
+
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Цена'">
-          <input type="number" min="1" id="input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input type="number" [customMin]="1" id="input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data"  #price="ngModel">
+          <div *ngIf="price.dirty || price.touched">
+            <span *ngIf="price?.errors?.customMin" class="text-danger">Значение должно быть больше 0</span>
+          </div>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Цена производителя'">
-          <input type="number" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input type="number" id = "input_m_price" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Ед. измерения'">
           <select class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+            <option></option>
             <option value="PCS">Штуки</option>
             <option value="GRAMS">Граммы</option>
             <option value="CENTIMETERS">Сантиметры</option>
@@ -83,16 +91,22 @@
           </select>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Имя производ.'">
-          <input id="input_m_name"  type="text" class="form-control" [ngModel]="currentRecord[col.data]" required [name]="col.data">
+          <input id="input_m_name" type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Полное имя производ.'">
-          <input id="input_m_fullName" required type="text" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input id="input_m_fullName" [customMaxLength] = "1599" type="text" class="form-control" [ngModel]="currentRecord[col.data]" #fullName="ngModel" [name]="col.data">
+          <div *ngIf="fullName.dirty || fullName.touched">
+            <span *ngIf="fullName?.errors?.customMaxLength" class="text-danger">Длина строки не должна привышать 1599 символов.</span>
+          </div>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Число сотрудников'">
-          <input type="number" id="input_m_employeesCount" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data">
+          <input type="number" [customMin]="1" id="input_m_employeesCount" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data" #countEmpl = "ngModel">
+          <div *ngIf="countEmpl.dirty || countEmpl.touched">
+            <span *ngIf="countEmpl?.errors?.customMin" class="text-danger">Значение должно быть больше 0</span>
+          </div>
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Тип компании'">
-          <select class="form-control" required [ngModel]="currentRecord[col.data]"  [name]="col.data">
+          <select class="form-control" [ngModel]="currentRecord[col.data]"  [name]="col.data">
             <option></option>
             <option value="COMMERCIAL">Коммерческая</option>
             <option value="PUBLIC">Публичная</option>

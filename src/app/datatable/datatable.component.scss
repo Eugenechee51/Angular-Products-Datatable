@@ -1,5 +1,7 @@
+.ng-valid[customRequired],
+.ng-valid.customRequired,
 .ng-valid[required],
-.ng-valid.required {
+.ng-valid.required{
   border-left: 5px solid #42A948;
   /* green */
 }
@@ -10,12 +12,13 @@
   /* red */
 }
 
+
 .table{
   #display: block;
   margin: 0;
   padding: 0;
-  min-width: 100vw;
-  font-size: 8pt;
+  min-width: 99vw;
+  font-size: calc( (100vw - 1280px)/(3000 - 1280) * (18 - 8) + 8px);
 }
 .thead{
   overflow: hidden;
@@ -44,22 +47,23 @@
 }
 .measureArea{
   //width: 50%;
-  left: 1rem;
+  left: 1vw;
+  right: 75vw;
   //width: 30vw;
-  //position: static;
+  position: absolute;
   padding-block: 20px;
 }
 .countArea{
   //width: 50%;
-  left: 30rem;
-  right: 30rem;
+  left: 40vw;
+  right: 30vw;
   position: absolute;
   //width: 30vw;
   padding-block: 20px;
 }
 .uniqueArea{
   //width: 60%;
-  left: 60rem;
+  left: 75vw;
   right: 1rem;
   //width: 30vw;
   position: absolute;
