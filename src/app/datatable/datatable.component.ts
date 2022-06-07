@@ -9,7 +9,7 @@ import {ToastrService} from 'ngx-toastr';
 import parser from 'xml2js';
 import {trim} from 'jquery';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {customRequiredValidator} from './validator.component';
+import {customRequiredValidator} from './custom-required.directive';
 
 
 function parseXml(xmlData: any) {
@@ -185,22 +185,20 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.toastr.error(err.message, 'Ошибка получения продуктов');
     });
   }
-  require(elem: any, check: boolean) {
-    elem.prop('required', check);
-    elem.prop('ng-reflect-required', check);
-  }
   manufactureRequire(form, colData) {
     if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
-      if (form.controls[colData]?.errors?.customRequired){
+      form.updateValueAndValidity();
+      if (form.controls[colData]?.errors){
         if (colData === 'manufacturer.0.name' || colData === 'manufacturer.0.fullName' ||  colData === 'manufacturer.0.type'){
           if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === ''){
             form.controls[colData]?.clearValidators();
             form.controls[colData]?.updateValueAndValidity();
-            console.log(form);
+            form.updateValueAndValidity();
             return false;
           } else {
-            form.controls[colData]?.setValidators(customRequiredValidator);
+            form.controls[colData]?.setValidators([Validators.required]);
             form.controls[colData]?.updateValueAndValidity();
+            form.updateValueAndValidity();
             return true;
           }
         }else{
@@ -211,12 +209,13 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
           if (trim(form.value['manufacturer.0.name']) === '' && trim(form.value['manufacturer.0.fullName']) === '' && trim(form.value['manufacturer.0.type']) === '') {
             form.controls[colData]?.clearValidators();
             form.controls[colData]?.updateValueAndValidity();
+            form.updateValueAndValidity();
           } else {
             console.log(form);
-            form.controls[colData]?.setValidators(customRequiredValidator);
+            form.controls[colData]?.setValidators([Validators.required]);
             form.controls[colData]?.updateValueAndValidity();
+            form.updateValueAndValidity();
             return false;
-            // console.log(form);
           }
         }
         return false;
@@ -225,8 +224,6 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     }
   }
   openAddEditModal(iRow) {
-    // if (iRow === -1)
-      // iRow = 0;
     if (iRow !== -1) {
       this.currentOperation = 'Изменение';
       this.currentRecord = {
@@ -250,10 +247,9 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     this.modalService.open(this.addEditModalRef).result
       .then((result) => console.log('Modal closed'))
       .catch(err => '');
-    // delete this.currentRecord.creationDate;
-    // $('#input_name').on('change', () => {
-    //
-    // })
+  }
+  unArray(object){
+    return object.length > 1 ? object : object[0];
   }
   onAddEditFormSubmit(formValue) {
     this.showLoader = true;
@@ -267,8 +263,8 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
         },
         price: formValue.price,
         manufactureCost: formValue.manufactureCost,
-        unitOfMeasure: formValue.unitOfMeasure,
-        manufacturer: {
+        unitOfMeasure: formValue.unitOfMeasure === '' ? null : formValue.unitOfMeasure,
+        manufacturer: trim(formValue['manufacturer.0.name']) === '' ? null : {
           name: formValue['manufacturer.0.name'],
           fullName: formValue['manufacturer.0.fullName'],
           employeesCount: formValue['manufacturer.0.employeesCount'],
@@ -293,19 +289,19 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     } else {
       const json = {
         id: this.currentRecord['id'][0],
-        name: formValue.name.length > 1 ? formValue.name : formValue.name[0] ,
+        name: this.unArray(formValue.name) ,
         coordinates: {
-          x: formValue['coordinates.0.x'].length > 1 ? formValue['coordinates.0.x'] : formValue['coordinates.0.x'][0],
-          y: formValue['coordinates.0.y'].length > 1 ? formValue['coordinates.0.y'] : formValue['coordinates.0.y'][0]
+          x: this.unArray(formValue['coordinates.0.x']),
+          y: this.unArray(formValue['coordinates.0.y'])
         },
-        price: formValue.price.length > 1 ? formValue.price : formValue.price[0],
-        manufactureCost: formValue.manufactureCost.length > 1 ? formValue.manufactureCost : formValue.manufactureCost[0],
-        unitOfMeasure: formValue.unitOfMeasure.length > 1 ? formValue.unitOfMeasure : formValue.unitOfMeasure[0],
-        manufacturer: {
-          name: formValue['manufacturer.0.name'].length > 1 ? formValue['manufacturer.0.name'] : formValue['manufacturer.0.name'][0],
-          fullName: formValue['manufacturer.0.fullName'].length > 1 ? formValue['manufacturer.0.fullName'] : formValue['manufacturer.0.fullName'][0],
-          employeesCount: formValue['manufacturer.0.employeesCount'].length > 1 ? formValue['manufacturer.0.employeesCount'] : formValue['manufacturer.0.employeesCount'][0],
-          type: formValue['manufacturer.0.type'].length > 1 ? formValue['manufacturer.0.type'] : formValue['manufacturer.0.type'][0]
+        price: this.unArray(formValue.price),
+        manufactureCost: this.unArray(formValue.manufactureCost),
+        unitOfMeasure: this.unArray(formValue.unitOfMeasure),
+        manufacturer: trim(this.unArray(formValue['manufacturer.0.name'])) === '' ? null : {
+          name: this.unArray(formValue['manufacturer.0.name']),
+          fullName: this.unArray(formValue['manufacturer.0.fullName']),
+          employeesCount: this.unArray(formValue['manufacturer.0.employeesCount']),
+          type: this.unArray(formValue['manufacturer.0.type'])
         }
       };
       console.log(formValue['manufacturer.0.employeesCount'][0]);
@@ -338,7 +334,6 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.toastr.success('Продукты удалены успешно', 'Успех');
       this.customDtOptions.eventCallbacks.deleted();
       this.getData(true);
-      // this.rerender();
 
     }, (err) => {
       console.log('Ошибка удаления продуктов', err.message);

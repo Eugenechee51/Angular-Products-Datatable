@@ -1,5 +1,5 @@
-import {Directive, Input} from '@angular/core';
-import {NG_VALIDATORS, Validator, FormControl, AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {Directive} from '@angular/core';
+import {NG_VALIDATORS, Validator, AbstractControl, ValidatorFn} from '@angular/forms';
 import {trim} from 'jquery';
 
 @Directive({
@@ -9,8 +9,14 @@ import {trim} from 'jquery';
 })
 export class CustomRequiredDirective implements Validator {
 
-    validate(c: FormControl): {[key: string]: any} {
-        const v = c.value;
-        return (trim(v) === '' ) ? {customRequired: true} : null;
+    validate(c: AbstractControl): {[key: string]: any} | null {
+        return customRequiredValidator()(c);
     }
+}
+
+export function customRequiredValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+        const value = control.value;
+        return (trim(value) === '') ? {customRequired: true} : null;
+    };
 }
