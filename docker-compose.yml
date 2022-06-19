@@ -2,6 +2,7 @@ version: "3.3"
 services:
   frontend:
     image: "ityce4ka/frontend-cd:latest"
+#    platform: linux/amd64
     restart: unless-stopped
     build: .
     networks:
