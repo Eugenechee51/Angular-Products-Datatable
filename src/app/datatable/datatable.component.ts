@@ -170,7 +170,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.data = this.data.ArrayList.item;
       // console.log(this.data);
       this.dtOptions.data = this.data;
-      this.templateDataObject ? '' : this.templateDataObject = Object.fromEntries(Object.keys(this.data[0]).map(key => [key, '']));
+      //this.templateDataObject ? '' : this.templateDataObject = Object.fromEntries(Object.keys(this.data[0]).map(key => [key, '']));
       // this.templateDataObject = 0;
       // console.log("templateDataObject: " + this.templateDataObject);
       if (flag) {
@@ -226,6 +226,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   openAddEditModal(iRow) {
     if (iRow !== -1) {
       this.currentOperation = 'Изменение';
+      console.log(this.data[iRow]);
       this.currentRecord = {
         id: this.data[iRow]?.id,
         name: this.data[iRow].name,
@@ -252,6 +253,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     return object.length > 1 ? object : object[0];
   }
   onAddEditFormSubmit(formValue) {
+    console.log(formValue);
     this.showLoader = true;
     this.modalService.dismissAll();
     if (this.currentOperation === 'Добавление') {
