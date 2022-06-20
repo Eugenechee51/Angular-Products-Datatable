@@ -55,4 +55,14 @@ export class DataTableService {
     const endPoint = route.split(':')[0];
     return this.http.get(`${this.baseApiUrl}/${endPoint}`, {responseType: 'text'});
   }
+
+  getProductsByManufactureId(route, manufactureId) {
+    const endPoint = route.split(':')[0];
+    return this.http.get(`${this.baseApiUrl}/${endPoint}?manufactureId=${manufactureId}`, {responseType: 'text'});
+  }
+
+  getProductsByPrice(route, minPrice, maxPrice) {
+    const endPoint = route.split(':')[0];
+    return this.http.get(`${this.baseApiUrl}/${endPoint}?minPrice=${minPrice}maxPrice=${maxPrice}}`, {responseType: 'text'});
+ }
 }

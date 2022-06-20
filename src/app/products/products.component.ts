@@ -19,6 +19,8 @@ export class ProductsComponent implements OnInit {
       deleteByMeasure: "products/measure",
       getByManufacturer: "products/measure",
       getUniqueManufactureCosts: "products/distinct",
+      getProductsByManufactureId: "products/manufacture",
+      getProductsByPrice: "products/price",
       param: "id",
       generateParamOnAdd:true,
       dataTableOptions: {

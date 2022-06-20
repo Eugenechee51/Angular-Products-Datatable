@@ -124,12 +124,20 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     };
     this.dataTableService.baseApiUrl = this.customDtOptions.baseApiUrl;
     const measure = document.getElementById('measureField') as HTMLInputElement | null;
+    const minPriceField = document.getElementById('minPriceField') as HTMLInputElement | null;
+    const maxPriceField = document.getElementById('maxPriceField') as HTMLInputElement | null;
     console.log(measure.value);
     $('div.container').find('#delByMeasureBtn').on('click', () => scope.removeByMeasure(measure.value));
 
     const manufacturerId = document.getElementById('manufacturerIdField') as HTMLInputElement | null;
     $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
     $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
+
+    const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
+    $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
+
+    $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(minPriceField.value, maxPriceField.value));
+
     this.getData(false);
   }
 
@@ -410,8 +418,52 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.dtOptions.data = this.data;
       this.rerender();
     }, (err) => {
-      console.log('Ошибка удаления записи', err.message);
-      this.toastr.error(err.message, 'Ошибка удаления записи');
+      console.log('Ошибка получения продуктов с уникальными стоимостями', err.message);
+      this.toastr.error(err.message, 'Ошибка получения продуктов с уникальными стоимостями');
+      this.currentRecord = null;
+      this.currentOperation = '';
+      this.showLoader = false;
+    });
+  }
+
+  getProductsByManufactureId(manufactureId){
+    this.showLoader = true;
+    this.dataTableService.getProductsByManufactureId(this.customDtOptions.getProductsByManufactureId, manufactureId).subscribe((res) => {
+      console.log(res);
+      this.data = res;
+      this.data = parseXml(this.data);
+      // this.data = this.data['Count']['count'];
+      this.currentRecord = null;
+      this.currentOperation = '';
+      this.toastr.success('Продукты указанного производителя успешно найдены', 'Успех');
+      // document.getElementById("p1").textContent = 'Products counted: '+ this.data;
+      //this.customDtOptions.eventCallbacks.countedByManufacturer();
+      this.data = this.data.ArrayList.item;
+      console.log(this.data);
+      this.dtOptions.data = this.data;
+      this.rerender();
+    }, (err) => {
+      console.log('Ошибка получения продуктов указанного производителя', err.message);
+      this.toastr.error(err.message, 'Ошибка получения продуктов указанного производителя');
+      this.currentRecord = null;
+      this.currentOperation = '';
+      this.showLoader = false;
+    });
+  }
+
+  getProductsByPrice(minPrice, maxPrice) {
+    this.showLoader = true;
+    console.log(minPrice);
+    this.dataTableService.getProductsByPrice(this.customDtOptions.getProductsByPrice, minPrice, maxPrice).subscribe((res) => {
+      console.log(res);
+      this.currentRecord = null;
+      this.currentOperation = '';
+      this.toastr.success('Продукты получены успешно', 'Успех');
+      //this.customDtOptions.eventCallbacks.deleted();
+      this.getData(true);
+    }, (err) => {
+      console.log('Ошибка получения продуктов', err.message);
+      this.toastr.error(err.message, 'Ошибка получения продуктов');
       this.currentRecord = null;
       this.currentOperation = '';
       this.showLoader = false;
