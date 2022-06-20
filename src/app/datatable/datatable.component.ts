@@ -194,6 +194,11 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     });
   }
   manufactureRequire(form, colData) {
+    console.log(colData);
+    if (colData === 'price'){
+      console.log('hellow');
+      return false;
+    }
     if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
       form.updateValueAndValidity();
       if (form.controls[colData]?.errors){
@@ -228,7 +233,6 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
         }
         return false;
       }
-
     }
   }
   openAddEditModal(iRow) {
