@@ -201,9 +201,9 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     console.log(colData);
     if (colData === 'price'){
       if ((form.value.price) === '') {
-        form.controls[colData]?.clearValidators();
-        form.controls[colData]?.updateValueAndValidity();
-        form.updateValueAndValidity();
+        // form.controls[colData]?.clearValidators();
+        // form.controls[colData]?.updateValueAndValidity();
+        // form.updateValueAndValidity();
         return false;
       }
       return false;
