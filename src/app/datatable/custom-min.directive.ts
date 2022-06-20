@@ -12,6 +12,6 @@ export class CustomMinDirective implements Validator {
 
     validate(c: FormControl): {[key: string]: any} {
         const v = c.value;
-        return (v !== null && v < this.customMin) ? {customMin: true} : null;
+        return (v !== null && v !== '' && v < this.customMin) ? {customMin: true} : null;
     }
 }

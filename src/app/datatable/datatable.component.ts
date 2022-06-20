@@ -124,8 +124,12 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     };
     this.dataTableService.baseApiUrl = this.customDtOptions.baseApiUrl;
     const measure = document.getElementById('measureField') as HTMLInputElement | null;
-    const minPriceField = document.getElementById('minPriceField') as HTMLInputElement | null;
-    const maxPriceField = document.getElementById('maxPriceField') as HTMLInputElement | null;
+    // const minPriceField = document.getElementById('minPriceField') as HTMLInputElement | null;
+    // const maxPriceField = document.getElementById('maxPriceField') as HTMLInputElement | null;
+    //
+    // if (minPriceField.value > maxPriceField.value) {
+    //   minPriceField.value = "Минимальное";
+    // }
     console.log(measure.value);
     $('div.container').find('#delByMeasureBtn').on('click', () => scope.removeByMeasure(measure.value));
 
@@ -133,10 +137,10 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
     $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
 
-    const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
-    $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
-
-    $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(minPriceField.value, maxPriceField.value));
+    // const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
+    // $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
+    //
+    // $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(minPriceField.value, maxPriceField.value));
 
     this.getData(false);
   }
@@ -196,7 +200,12 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   manufactureRequire(form, colData) {
     console.log(colData);
     if (colData === 'price'){
-      console.log('hellowvwv');
+      if ((form.value.price) === '') {
+        form.controls[colData]?.clearValidators();
+        form.controls[colData]?.updateValueAndValidity();
+        form.updateValueAndValidity();
+        return false;
+      }
       return false;
     }
     if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
