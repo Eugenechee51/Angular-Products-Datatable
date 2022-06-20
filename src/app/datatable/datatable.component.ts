@@ -196,7 +196,7 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   manufactureRequire(form, colData) {
     console.log(colData);
     if (colData === 'price'){
-      console.log('hellow');
+      console.log('hellowvwv');
       return false;
     }
     if (form.controls[colData]?.touched || form.controls[colData]?.dirty){
