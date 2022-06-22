@@ -198,9 +198,11 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     });
   }
   manufactureRequire(form, colData) {
-    console.log(colData);
+    //console.log(colData);
     if (colData === 'price'){
+      console.log(form.value.price);
       if ((form.value.price) === '') {
+        console.log('hello');
         // form.controls[colData]?.clearValidators();
         // form.controls[colData]?.updateValueAndValidity();
         form.updateValueAndValidity();
