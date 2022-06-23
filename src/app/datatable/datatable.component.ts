@@ -517,11 +517,23 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     console.log(minPrice);
     this.dataTableService.getProductsByPrice(this.customDtOptions.getProductsByPrice, minPrice, maxPrice).subscribe((res) => {
       console.log(res);
+      if (res === null) {
+        this.toastr.info('Не найдено продуктов из заданного диапазона цен!', 'Внимание!');
+        this.showLoader = false;
+        this.currentRecord = null;
+        this.dtOptions.data = [];
+        this.rerender();
+        return;
+      }
+      this.data = res;
+      this.data = parseXml(this.data);
       this.currentRecord = null;
       this.currentOperation = '';
       this.toastr.success('Продукты получены успешно', 'Успех');
-      //this.customDtOptions.eventCallbacks.deleted();
-      this.getData(true);
+      this.data = this.data.ArrayList.item;
+      console.log(this.data);
+      this.dtOptions.data = this.data;
+      this.rerender();
     }, (err) => {
       console.log('Ошибка получения продуктов', err.message);
       this.toastr.error(err.message, 'Ошибка получения продуктов');
