@@ -21,53 +21,70 @@
   </tr>
   </tfoot>
 </table>
-<div class="subDiv">
-  <div class="measureArea">
-    <button id="delByMeasureBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Удалить продукты по типу ед. измерения:</button>
-    <div class="inputDiv">
-      <!--<input type="text" id="measureField" placeholder="PCS or GRAMS" tabindex="1" />-->
-      <select id="measureField" class="select">
-        <option value="PCS">Штуки</option>
-        <option value="GRAMS">Граммы</option>
-        <option value="CENTIMETERS">Сантиметры</option>
-        <option value="MILLILITERS">Миллилитры</option>
-      </select>
-    </div>
-  </div>
-  <div class="countArea">
-    <button id="countByManufacturerIdBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Подсчитать кол-во продуктов производителя:</button>
-    <div class="inputDiv">
-      <input type="text" id="manufacturerIdField" placeholder="ИД производителя" tabindex="1"/>
-      <div id="count1" class="paragraph">
-        <p id="p1"></p>
-      </div>
-    </div>
-  </div>
-  <div class="uniqueArea">
-    <button id="getUniqueManufactureCostBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Отобразить продукты с уникальными стоимостями</button>
-  </div>
-</div>
-<!--<div class="card">-->
-<!--  <div>-->
-<!--    <button id="getProductsByManufactureIdBtn" tabindex="4" class="btn btn-dark px-2 py-1 mr-3" >Отобразить продукты указанного производителя:</button>-->
+<!--<div class="subDiv">-->
+<!--  <div class="measureArea">-->
+<!--    <button id="delByMeasureBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Удалить продукты по типу ед. измерения:</button>-->
 <!--    <div class="inputDiv">-->
-<!--      <input type="text" id="manufacturerIdField2" placeholder="ИД производителя" tabindex="1"/>-->
-<!--      <div id="count2" class="paragraph">-->
-<!--        <p id="p2"></p>-->
-<!--      </div>-->
+<!--      &lt;!&ndash;<input type="text" id="measureField" placeholder="PCS or GRAMS" tabindex="1" />&ndash;&gt;-->
+<!--      <select id="measureField" class="select">-->
+<!--        <option value="PCS">Штуки</option>-->
+<!--        <option value="GRAMS">Граммы</option>-->
+<!--        <option value="CENTIMETERS">Сантиметры</option>-->
+<!--        <option value="MILLILITERS">Миллилитры</option>-->
+<!--      </select>-->
 <!--    </div>-->
 <!--  </div>-->
 <!--  <div class="countArea">-->
-<!--    <button id="getProductsByPriceBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Выбрать всю продукцию из диапазона цен:</button>-->
+<!--    <button id="countByManufacturerIdBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Подсчитать кол-во продуктов производителя:</button>-->
 <!--    <div class="inputDiv">-->
-<!--      <input type="text" id="minPriceField" placeholder="Мин. цена" tabindex="1"/>-->
-<!--      <input type="text" id="maxPriceField" placeholder="Макс. цена" tabindex="2"/>-->
-<!--      <div id="count" class="paragraph">-->
+<!--      <input type="text" id="manufacturerIdField" placeholder="ИД производителя" tabindex="1"/>-->
+<!--      <div id="count1" class="paragraph">-->
 <!--        <p id="p1"></p>-->
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
+<!--  <div class="uniqueArea">-->
+<!--    <button id="getUniqueManufactureCostBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Отобразить продукты с уникальными стоимостями</button>-->
+<!--  </div>-->
 <!--</div>-->
+<div class="subDiv">
+  <div class="measureArea text-center">
+    <button id="getProductsByManufactureIdBtn" tabindex="2" class="btn btn-dark px-2 py-1 mr-3" >Отобразить продукты производителя:</button>
+    <div class="inputDiv text-center">
+      <input type="text" id="manufacturerIdField2" placeholder="ИД производителя" tabindex="1"/>
+      <div id="count2" class="paragraph">
+        <p id="p2"></p>
+      </div>
+    </div>
+  </div>
+  <div class="countArea text-center">
+    <button id="getProductsByPriceBtn" tabindex="2" class="btn btn-primary px-2 py-1 mr-3" >Выбрать всю продукцию из диапазона цен:</button>
+      <div class="inputDiv text-center">
+<!--        <ngx-numeric-range-form-field-->
+<!--                [formControl]="rangeControl"-->
+<!--                label="Numeric range"-->
+<!--                (blurred)="onBlur()"-->
+<!--                (enterPressed)="onEnter()"-->
+<!--                (numericRangeChanged)="onValueChange($event)"-->
+<!--        ></ngx-numeric-range-form-field>-->
+        <form [formGroup]="userForm">
+          <input type="text" id="minPriceField" class="col-4" formControlName="num1" placeholder="Мин. цена" tabindex="1"/>
+          <input type="text" id="maxPriceField" class="col-4 f" formControlName="num2" placeholder="Макс. цена" tabindex="2"/>
+<!--          <div *ngIf="num1.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">-->
+<!--            <div *ngIf="num1.errors.required">-->
+<!--              Enter your number.-->
+<!--            </div>-->
+<!--            <div *ngIf="num1.errors.min">-->
+<!--              Minimum required number is {{minNum}}.-->
+<!--            </div>-->
+<!--          </div>-->
+        </form>
+      <div id="count" class="paragraph">
+        <p id="p1"></p>
+      </div>
+    </div>
+  </div>
+</div>
 <ng-template #addEditModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">{{currentOperation}} продукта</h4>
@@ -87,14 +104,14 @@
           <input type="text" id="input_x" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data">
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Коорд. у'">
-          <input type="text" [customMin]="-686.999" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data " #coor_y="ngModel">
+          <input type="text" [customMin]="-686.999" id = "input_y" class="form-control" [ngModel]="currentRecord[col.data]" customRequired [name]="col.data" #coor_y="ngModel">
           <div *ngIf="coor_y.dirty || coor_y.touched">
             <span *ngIf="coor_y?.errors?.customMin" class="text-danger">Значение должно быть больше -687</span>
           </div>
 
         </div>
         <div class="col-sm-10" *ngIf="col.title === 'Цена'">
-          <input type="text" [customMin]="1" id="input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data"  #price="ngModel">
+          <input type="text" [customMin]="1" id="input_price" class="form-control" [ngModel]="currentRecord[col.data]" [name]="col.data" #price="ngModel">
           <div *ngIf="price.dirty || price.touched">
             <span *ngIf="price?.errors?.customMin" class="text-danger">Значение должно быть больше 0</span>
           </div>

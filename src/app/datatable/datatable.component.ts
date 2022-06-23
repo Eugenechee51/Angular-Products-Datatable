@@ -8,9 +8,7 @@ import {ToastrService} from 'ngx-toastr';
 
 import parser from 'xml2js';
 import {trim} from 'jquery';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {customRequiredValidator} from './custom-required.directive';
-
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 function parseXml(xmlData: any) {
     let result;
@@ -18,8 +16,6 @@ function parseXml(xmlData: any) {
     console.log(result);
     return result;
 }
-
-
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -30,6 +26,15 @@ function parseXml(xmlData: any) {
 })
 
 export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
+
+  minValue: number;
+  minPriceField: any;
+  maxPriceField: any;
+
+  userForm = this.formBuilder.group({
+    num1: ['', Validators.min(0.00001)],
+    num2: ['', [Validators.min(0.00001)]]
+  });
 
   @Input() customDtOptions: any;
   @ViewChild('addEditModal') addEditModalRef: ElementRef;
@@ -43,8 +48,9 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   currentOperation: any;
   templateDataObject: any;
   showLoader = false;
-  constructor(private dataTableService: DataTableService, private modalService: NgbModal
-    ,         private decimalPipe: DecimalPipe, private toastr: ToastrService) { }
+  constructor(private dataTableService: DataTableService, private modalService: NgbModal, private formBuilder: FormBuilder,
+              private decimalPipe: DecimalPipe, private toastr: ToastrService) {
+  }
 
   ngOnInit(): void {
     // welcome
@@ -123,24 +129,23 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       columnDefs
     };
     this.dataTableService.baseApiUrl = this.customDtOptions.baseApiUrl;
-    const measure = document.getElementById('measureField') as HTMLInputElement | null;
-    // const minPriceField = document.getElementById('minPriceField') as HTMLInputElement | null;
-    // const maxPriceField = document.getElementById('maxPriceField') as HTMLInputElement | null;
-    //
+   // const measure = document.getElementById('measureField') as HTMLInputElement | null;
+    this.minPriceField = document.getElementById('minPriceField') as HTMLInputElement | null;
+    this.maxPriceField = document.getElementById('maxPriceField') as HTMLInputElement | null;
+
     // if (minPriceField.value > maxPriceField.value) {
     //   minPriceField.value = "Минимальное";
     // }
-    console.log(measure.value);
-    $('div.container').find('#delByMeasureBtn').on('click', () => scope.removeByMeasure(measure.value));
+    // console.log(measure.value);
+    // $('div.container').find('#delByMeasureBtn').on('click', () => scope.removeByMeasure(measure.value));
 
     const manufacturerId = document.getElementById('manufacturerIdField') as HTMLInputElement | null;
     $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
     $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
 
-    // const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
-    // $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
-    //
-    // $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(minPriceField.value, maxPriceField.value));
+    const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
+    $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
+    $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(this.minPriceField.value, this.maxPriceField.value));
 
     this.getData(false);
   }
@@ -466,7 +471,15 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     });
   }
 
-  getProductsByPrice(minPrice, maxPrice) {
+  getProductsByPrice(minPrice: number, maxPrice: number) {
+    if (minPrice <= 0 || maxPrice <= 0) {
+      this.toastr.error('Порог цены должен быть больше 0!','Ошибка');
+      return;
+    }
+    if (minPrice > maxPrice) {
+      this.toastr.error('Максимальный порог цены должен быть больше минимального!','Ошибка');
+      return;
+    }
     this.showLoader = true;
     console.log(minPrice);
     this.dataTableService.getProductsByPrice(this.customDtOptions.getProductsByPrice, minPrice, maxPrice).subscribe((res) => {
