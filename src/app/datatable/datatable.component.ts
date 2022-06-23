@@ -8,7 +8,7 @@ import {ToastrService} from 'ngx-toastr';
 
 import parser from 'xml2js';
 import {trim} from 'jquery';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 
 function parseXml(xmlData: any) {
     let result;
@@ -16,6 +16,18 @@ function parseXml(xmlData: any) {
     console.log(result);
     return result;
 }
+
+interface ValidatorFn {
+    (c: AbstractControl): ValidationErrors | null
+}
+
+const MyAwesomeRangeValidator: ValidatorFn = (fg: FormGroup) => {
+    const start = fg.get('rangeStart').value;
+    const end = fg.get('rangeEnd').value;
+    return start !== null && end !== null && start <= end
+        ? null
+        : { range: true };
+};
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -31,10 +43,12 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   minPriceField: any;
   maxPriceField: any;
 
-  userForm = this.formBuilder.group({
-    num1: ['', Validators.min(0.00001)],
-    num2: ['', [Validators.min(0.00001)]]
-  });
+  // userForm = this.formBuilder.group({
+  //   num1: ['', Validators.min(0.00001)],
+  //   num2: ['', [Validators.min(0.00001)]]
+  // });
+
+  form: FormGroup;
 
   @Input() customDtOptions: any;
   @ViewChild('addEditModal') addEditModalRef: ElementRef;
@@ -48,8 +62,14 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   currentOperation: any;
   templateDataObject: any;
   showLoader = false;
-  constructor(private dataTableService: DataTableService, private modalService: NgbModal, private formBuilder: FormBuilder,
+  constructor(private dataTableService: DataTableService, private modalService: NgbModal, private fb: FormBuilder,
               private decimalPipe: DecimalPipe, private toastr: ToastrService) {
+
+      this.form = this.fb.group({
+          rangeStart: [null, [Validators.min(0.00001), Validators.required]],
+          rangeEnd: [null, [Validators.min(0.00001), Validators.required]]
+      }, { validator: MyAwesomeRangeValidator});
+
   }
 
   ngOnInit(): void {
@@ -448,7 +468,20 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
 
   getProductsByManufactureId(manufactureId){
     this.showLoader = true;
+    if (manufactureId === '') {
+      this.toastr.info('Укажите ИД производителя', 'Внимание!');
+      this.showLoader = false;
+      return;
+    }
     this.dataTableService.getProductsByManufactureId(this.customDtOptions.getProductsByManufactureId, manufactureId).subscribe((res) => {
+      if (res === null) {
+        this.toastr.info('Не найдено продуктов указанного производителя!', 'Внимание!');
+        this.showLoader = false;
+        this.currentRecord = null;
+        this.dtOptions.data = [];
+        this.rerender();
+        return;
+      }
       console.log(res);
       this.data = res;
       this.data = parseXml(this.data);
@@ -458,13 +491,13 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
       this.toastr.success('Продукты указанного производителя успешно найдены', 'Успех');
       // document.getElementById("p1").textContent = 'Products counted: '+ this.data;
       //this.customDtOptions.eventCallbacks.countedByManufacturer();
-      this.data = this.data.ArrayList.item;
+      this.data = this.data?.ArrayList.item;
       console.log(this.data);
       this.dtOptions.data = this.data;
       this.rerender();
     }, (err) => {
       console.log('Ошибка получения продуктов указанного производителя', err.message);
-      this.toastr.error(err.message, 'Ошибка получения продуктов указанного производителя');
+      this.toastr.error('Ошибка получения продуктов указанного производителя', 'Ошибка');
       this.currentRecord = null;
       this.currentOperation = '';
       this.showLoader = false;
@@ -472,14 +505,14 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
   }
 
   getProductsByPrice(minPrice: number, maxPrice: number) {
-    if (minPrice <= 0 || maxPrice <= 0) {
-      this.toastr.error('Порог цены должен быть больше 0!','Ошибка');
-      return;
-    }
-    if (minPrice > maxPrice) {
-      this.toastr.error('Максимальный порог цены должен быть больше минимального!','Ошибка');
-      return;
-    }
+    // if (minPrice <= 0 || maxPrice <= 0) {
+    //   this.toastr.error('Порог цены должен быть больше 0!','Ошибка');
+    //   return;
+    // }
+    // if (minPrice > maxPrice) {
+    //   this.toastr.error('Максимальный порог цены должен быть больше минимального!','Ошибка');
+    //   return;
+    // }
     this.showLoader = true;
     console.log(minPrice);
     this.dataTableService.getProductsByPrice(this.customDtOptions.getProductsByPrice, minPrice, maxPrice).subscribe((res) => {

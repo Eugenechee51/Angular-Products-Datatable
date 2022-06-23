@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { DataTablesModule } from 'angular-datatables';
 import { HttpClientModule } from '@angular/common/http';
 import { ProductsComponent } from './products/products.component';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModalModule, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,7 +32,8 @@ import {CustomMaxLengthDirective} from './datatable/custom-maxlength.directive';
         ToastrModule.forRoot(),
         NgxLoadingModule.forRoot({}),
         BrowserAnimationsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbTooltipModule
     ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
