@@ -159,12 +159,12 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     // console.log(measure.value);
     // $('div.container').find('#delByMeasureBtn').on('click', () => scope.removeByMeasure(measure.value));
 
-    const manufacturerId = document.getElementById('manufacturerIdField') as HTMLInputElement | null;
-    $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
-    $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
+    // const manufacturerId = document.getElementById('manufacturerIdField') as HTMLInputElement | null;
+    // $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
+    // $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
 
-    // const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
-    // $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
+    const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
+    $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
     // $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(this.minPriceField.value, this.maxPriceField.value));
 
     this.getData(false);
