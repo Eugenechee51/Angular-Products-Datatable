@@ -163,9 +163,9 @@ export class DataTableComponent implements OnDestroy, OnInit, AfterViewInit {
     $('div.container').find('#countByManufacturerIdBtn').on('click', () => scope.getCountByManufacturer(manufacturerId.value));
     $('div.container').find('#getUniqueManufactureCostBtn').on('click', () => scope.getUniqueManufactureCost());
 
-    const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
-    $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
-    $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(this.minPriceField.value, this.maxPriceField.value));
+    // const manufacturerId2 = document.getElementById('manufacturerIdField2') as HTMLInputElement | null;
+    // $('div.container').find('#getProductsByManufactureIdBtn').on('click', () => scope.getProductsByManufactureId(manufacturerId2.value));
+    // $('div.container').find('#getProductsByPriceBtn').on('click', () => scope.getProductsByPrice(this.minPriceField.value, this.maxPriceField.value));
 
     this.getData(false);
   }

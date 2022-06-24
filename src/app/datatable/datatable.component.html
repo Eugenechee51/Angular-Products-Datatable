@@ -57,34 +57,34 @@
       </div>
     </div>
   </div>
-  <div class="countArea text-center">
-    <div [ngbTooltip]="form.invalid ? 'Укажите диапазон цен' : ''">
-      <button id="getProductsByPriceBtn" [disabled]="form.invalid" tabindex="2" class="btn btn-primary px-2 py-1 mr-3">Выбрать всю продукцию из диапазона цен:</button>
-    </div>
-      <div class="inputDiv text-center">
-        <form [formGroup]="form">
-          <input  formControlName="rangeStart" type="number" id="minPriceField" class="col-4" placeholder="Мин. цена" tabindex="1"/>
-          <span>   : </span>
-          <input type="number" id="maxPriceField" class="col-4 f" formControlName="rangeEnd" placeholder="Макс. цена" tabindex="2"/>
-          <div *ngIf="form.controls['rangeStart'].errors?.min || form.controls['rangeEnd'].errors?.min; else content">
-            <span *ngIf="form.invalid && (form.dirty || form.touched) " class="text-info">Цена должна быть больше 0</span>
-          </div>
-          <ng-template #content>
-            <span></span>
-          </ng-template>
-          <div *ngIf="!form.controls['rangeStart'].errors?.required && !form.controls['rangeEnd'].errors?.required && form.invalid && (form.dirty || form.touched) && (form.controls['rangeStart'].value > form.controls['rangeEnd'].value); else content2">
-            <span class="text-info">Укажите корректный диапазон</span>
-          </div>
-          <div *ngIf="(form.touched && form.invalid && form.controls['rangeStart'].errors?.required || form.controls['rangeEnd'].errors?.required) && ((form.controls['rangeStart'].value === null) && (form.controls['rangeEnd'].value === null)) ? form.reset(): null"></div>
-          <ng-template #content2>
-            <span></span>
-          </ng-template>
-        </form>
-      <div id="count" class="paragraph">
-        <p id="p1"></p>
-      </div>
-    </div>
-  </div>
+<!--  <div class="countArea text-center">-->
+<!--    <div [ngbTooltip]="form.invalid ? 'Укажите диапазон цен' : ''">-->
+<!--      <button id="getProductsByPriceBtn" [disabled]="form.invalid" tabindex="2" class="btn btn-primary px-2 py-1 mr-3">Выбрать всю продукцию из диапазона цен:</button>-->
+<!--    </div>-->
+<!--      <div class="inputDiv text-center">-->
+<!--        <form [formGroup]="form">-->
+<!--          <input  formControlName="rangeStart" type="number" id="minPriceField" class="col-4" placeholder="Мин. цена" tabindex="1"/>-->
+<!--          <span>   : </span>-->
+<!--          <input type="number" id="maxPriceField" class="col-4 f" formControlName="rangeEnd" placeholder="Макс. цена" tabindex="2"/>-->
+<!--          <div *ngIf="form.controls['rangeStart'].errors?.min || form.controls['rangeEnd'].errors?.min; else content">-->
+<!--            <span *ngIf="form.invalid && (form.dirty || form.touched) " class="text-info">Цена должна быть больше 0</span>-->
+<!--          </div>-->
+<!--          <ng-template #content>-->
+<!--            <span></span>-->
+<!--          </ng-template>-->
+<!--          <div *ngIf="!form.controls['rangeStart'].errors?.required && !form.controls['rangeEnd'].errors?.required && form.invalid && (form.dirty || form.touched) && (form.controls['rangeStart'].value > form.controls['rangeEnd'].value); else content2">-->
+<!--            <span class="text-info">Укажите корректный диапазон</span>-->
+<!--          </div>-->
+<!--          <div *ngIf="(form.touched && form.invalid && form.controls['rangeStart'].errors?.required || form.controls['rangeEnd'].errors?.required) && ((form.controls['rangeStart'].value === null) && (form.controls['rangeEnd'].value === null)) ? form.reset(): null"></div>-->
+<!--          <ng-template #content2>-->
+<!--            <span></span>-->
+<!--          </ng-template>-->
+<!--        </form>-->
+<!--      <div id="count" class="paragraph">-->
+<!--        <p id="p1"></p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 </div>
 <ng-template #addEditModal let-modal>
   <div class="modal-header">
